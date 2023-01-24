@@ -1,15 +1,25 @@
 const express = require('express');
+
 const app = express();
-const userRoutes = require('./routes/signup');
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended:false}));
 
-app.post('/', userRoutes);
-
-app.get('/', userRoutes);
+const sequelize = require('./util/database');
 
 app.set('views', 'views');
 
-app.listen('3000', () => {
-    console.log("open on 3000");
+const userRoutes = require('./routes/users');
+
+app.use(express.static("public"));
+
+app.use(express.urlencoded({extended : true}))
+
+app.use('/', userRoutes); 
+
+app.use('/users', userRoutes)
+
+sequelize.sync()
+.then(() => {
+    app.listen(3000);
+})
+.catch(err => {
+    console.log(err);
 })
