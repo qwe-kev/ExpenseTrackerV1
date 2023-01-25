@@ -33,16 +33,28 @@ router.post('/login', (req, res, next) => {
     const password = req.body.password;
     return User.findAll({
        where : {
-        'email' : email,
-        'password' : password
+        'email' : email
        }
     })
     .then((user) => {
         if(user.length > 0) {
-            res.json({status :200, message : "Successfully logged in", user})
+            return User.findAll({
+                where : {
+                 'email' : email,
+                 'password' : password
+                }
+             })
         }
         else{
             res.json({status : 404, message : "User not found"});
+        }
+    })
+    .then(user => {
+        if(user.length > 0) {
+            res.json({status :200, message : "Successfully logged in", user})
+        }
+        else {
+            res.json({status : 401, message : "User not authorized"});
         }
     })
     .catch(err => {
