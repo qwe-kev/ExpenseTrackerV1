@@ -7,7 +7,7 @@ const sequelize = require('../util/database');
 const User = require('../models/user');
 
 router.get('/signUp', (req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'index.html'))
+    res.sendFile(path.join(rootDir, 'views', 'register.html'))
 })
 
 router.get('/login', (req, res, next) => {
@@ -21,19 +21,16 @@ router.post('/createUser', (req, res, next) => {
         password : req.body.password
     })
     .then(user => {
-        //res.send(user);
-        res.sendFile(path.join(rootDir, 'views', 'login.html'))
+        res.status(200).redirect('/users/login');
     })
     .catch(err => {
-        console.log(err);
-        res.sendFile(path.join(rootDir, 'views', 'signUpError.html'))
+        res.status(409).json({status : 409, message : err});
     })
 })
 
-router.post('/users/login', (req, res, next) => {
+router.post('/login', (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    console.log(email, password);
     return User.findAll({
        where : {
         'email' : email,
@@ -41,16 +38,16 @@ router.post('/users/login', (req, res, next) => {
        }
     })
     .then((user) => {
-        console.log("user", user);
         if(user.length > 0) {
-            res.send('<h1>Success<h1>')
+            res.json({status :200, message : "Successfully logged in", user})
         }
         else{
-            res.send('<h1>No user Found!!!</h1>')
+            res.json({status : 404, message : "User not found"});
         }
     })
     .catch(err => {
         console.log(err);
+        res.send(err);
     })
 })
 

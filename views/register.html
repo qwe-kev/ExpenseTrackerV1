@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Login 10</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="/css/bootstrap/style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+
+
+	</head>
+	<body class="" style="background-image: url(/images/bg.jpg); background-size: cover">
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h3 class="heading-section">Sign up</h3>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	<form action="#" class="signin-form" method="post">
+		      		<div class="form-group">
+		      			<input type="text" class="form-control" name="name" id="name" placeholder="Username" required>
+		      		</div>
+					  <div class="form-group">
+						<input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+					</div>
+	            <div class="form-group">
+	              <input id="password-field" type="password" class="form-control" name="password" placeholder="Password" required>
+	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+	            </div>
+	            <div class="form-group">
+	            	<button type="submit" class="form-control btn btn-primary submit px-3">Sign Up</button>
+	            </div>
+	          </form>
+			  <p class="w-100 text-center message"></p>
+	          <p class="w-100 text-center">&mdash; Have an account? &mdash;</p>
+	          <div class="social d-flex text-center">
+	          	<a href="http://localhost:3000/users/login" class="px-2 py-2 mr-md-1 rounded">Login</a>
+	          </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script>
+		async function registerUser() {
+          try {
+            const name = document.querySelector('#name').value;
+            const email = document.querySelector('#email').value;
+            const password = document.querySelector('#password-field').value;
+            const res = await axios.post('http://localhost:3000/users/createUser', {
+              name : name, 
+              email : email,
+              password : password
+          })
+          document.querySelector('.message').innerHTML = "Cheers! created account";
+		  window.location.replace("http://localhost:3000/users/login");
+          }
+          catch(err) {
+            console.log("ERROR!!!", err);
+			document.querySelector('.message').innerHTML = "Email is already registered!";
+          }
+        }
+      
+        document.querySelector('.signin-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          registerUser();
+        })
+	</script>
+	<script src="/js/jquery.min.js"></script>
+  	<script src="/js/popper.js"></script>
+  	<script src="/js/bootstrap.min.js"></script>
+  	<script src="/js/main.js"></script>
+	</body>
+</html>
+

@@ -9,6 +9,7 @@ app.set('views', 'views');
 const userRoutes = require('./routes/users');
 
 app.use(express.static("public"));
+app.use(express.json());
 
 app.use(express.urlencoded({extended : true}))
 

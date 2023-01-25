@@ -1,25 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+  <head>
+  	<title>Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-    <form action="/users/login" method="POST">
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" id="email" required>
-          </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" id="password" required>
-          </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-      </form>
-      <a href="http://localhost:3000/users/signUp"><button>Haven't signed up yet?</button></a>
-</body>
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="/css/bootstrap/style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+
+
+	</head>
+	<body class="" style="background-image: url(/images/bg.jpg); background-size: cover">
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h3 class="heading-section">Login</h3>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	<form action="#" class="signin-form" method="post">
+					  <div class="form-group">
+						<input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+					</div>
+	            <div class="form-group">
+	              <input id="password-field" type="password" class="form-control" name="password" placeholder="Password" required>
+	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+	            </div>
+	            <div class="form-group">
+	            	<button type="submit" class="form-control btn btn-primary submit px-3">Login</button>
+	            </div>
+	            <div class="form-group d-md-flex">
+	            	<div class="w-50">
+		            	<label class="checkbox-wrap checkbox-primary">Remember Me
+									  <input type="checkbox" checked>
+									  <span class="checkmark"></span>
+									</label>
+								</div>
+								<div class="w-50 text-md-right">
+									<a href="#" style="color: #fff">Forgot Password?</a>
+								</div>
+	            </div>
+	          </form>
+			  <p class="w-100 text-center message"></p>
+	          <p class="w-100 text-center">&mdash;New user? &mdash;</p>
+	          <div class="social d-flex text-center">
+	          	<a href="http://localhost:3000/users/signUp" class="px-2 py-2 mr-md-1 rounded">Sign up</a>
+	          </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script>
+		async function loginUser() {
+          try {
+            const email = document.querySelector('#email').value;
+            const password = document.querySelector('#password-field').value;
+            const res = await axios.post('http://localhost:3000/users/login', {
+              email : email,
+              password : password
+          })
+          console.log(res);
+          document.querySelector('.message').innerHTML = `${res.data.message}`;
+          }
+          catch(err) {
+            console.log(err);
+          }
+        }
+      
+        document.querySelector('.signin-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          loginUser();
+        })
+	</script>
+	<script src="/js/jquery.min.js"></script>
+  	<script src="/js/popper.js"></script>
+  	<script src="/js/bootstrap.min.js"></script>
+  	<script src="/js/main.js"></script>
+	</body>
 </html>
+
