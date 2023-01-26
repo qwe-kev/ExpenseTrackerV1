@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const rootDir = path.dirname(require.main.filename);
-const users = [];
-const sequelize = require('../util/database');
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 

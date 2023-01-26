@@ -4,54 +4,239 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-</head>
+    <title>ExpenseTracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"></link>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/7ddc25c16e.js" crossorigin="anonymous"></script>
+  </head>
 <body>
-    <form class="form" action="#" method="POST">
-        <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" name="name" id="name" required>
-        </div>
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" name="email" id="email" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" id="password" required>
-          </div>
-        <button type="submit" class="btn btn-primary">Sign Up</button>
-      </form>
-      <a href="http://localhost:3000/users/login"><button>Already have an account?</button></a>
-      <p class="message text-danger"></p>
-      <script>
-        async function registerUser() {
-          try {
-            const name = document.querySelector('#name').value;
-            const email = document.querySelector('#email').value;
-            const password = document.querySelector('#password').value;
-            console.log(name, email, password);
-            const res = await axios.post('http://localhost:3000/users/createUser', {
-              name : name, 
-              email : email,
-              password : password
-          })
-          console.log(res);
-          document.querySelector('.message').innerHTML = `${res.status} : ${res.message}`;
-          }
-          catch(err) {
-            console.log(err);
-          }
-        }
-      
-        document.querySelector('.form').addEventListener('submit', (e) => {
-          e.preventDefault();
-          registerUser();
-        })
-      </script>
-    </body>
+  <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <div class="navbar-header" style="float: left; padding: 8px; text-align: center; width: 100%;">
+      <a class="navbar-brand" href="#" style="float:none;">
+        <i class="fa-solid fa-sack-dollar"></i>
+        Expense Tracker
+      </a>
+    </div>
+  </nav>
+  <br>
+      <div class="container-fluid m-auto img-fluid p-1" style="
+    /* background-image: url('https://cdn1.vectorstock.com/i/1000x1000/56/85/icon-design-budgets-to-save-expenses-pay-vector-37825685.jpg'); */
+      height: 100vh;
+    ">
+        <div class="msg"></div>
+        <form class="form-inline" id="my-form" method="post">
+            <div class="row m-auto">
+                <div class="col-sm-auto">
+                    <label class="col-form-label-sm" for="expAmount">Expense Amount</label>
+                  <input type="number" id="expAmount" class="form-control-sm" placeholder="0" aria-label="Expense amount">
+                </div>
+                <div class="col-sm-auto">
+                    <label class="col-form-label-sm" for="expDescription">Expense Description</label>
+                  <input type="text" id="expDescription" class="form-control-sm" placeholder="description" aria-label="description">
+                </div>
+                <div class="col-sm-auto">
+                    <label class="col-form-label-sm" for="expCategory">Expense Category</label>
+                    <select class="form-control-sm" id="expCategory" name="" id="">
+                        <option value="food">food</option>
+                        <option value="fuel">fuel</option>
+                        <option value="movie">movie</option>
+                        <option value="shopping">shopping</option>
+                    </select>
+                </div>
+                <div class="col-sm-auto">
+                    <button type="submit" id="Button" class="btn btn-primary btn-sm">Submit</button>
+                </div>
+              </div>
+        </form>
+       
+        <br>
+        <ul class="expList list-group list-group-numbered d-grid gap-1"></ul>
+        
+      </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js""></script>
+</body>
+<script>
+  const myForm = document.querySelector('#my-form');
+  const expAmt = document.querySelector("#expAmount");
+  const expDesc = document.querySelector("#expDescription");
+  const expCat = document.querySelector("#expCategory");
+  const message = document.querySelector(".msg");
+  const expList = document.querySelector(".expList");
+  const buttonSubmit = document.querySelector("#Button");
 
+  async function getExpenses(e) {
+    try {
+      const res = await axios.get('http://localhost:3000/expenses/getExpenses');
+      console.log("res",res.data)
+      res.data.forEach(expense => {
+            const {amount, description, category} = expense;
+            const li = document.createElement("li");
+            li.classList.add("list-group-item-warning")
+            const text = document.createTextNode(`${amount}-${description}-${category}`);
+            const deleteBtn = document.createElement("button");
+            const editBtn = document.createElement("button");
+            deleteBtn.classList.add("btn","btn-danger","btn-close");
+            editBtn.classList.add("btn","btn-sm","btn-primary","edit");
+            editBtn.innerHTML = "Edit";
+            li.appendChild(text);
+            li.appendChild(deleteBtn);
+            li.appendChild(editBtn);
+            expList.appendChild(li);
+        });
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+
+  async function addExpense(e) {
+        try{
+            e.preventDefault();
+            if(expAmt.value === "" || expDesc.value === "" || expCat.value === "") {
+                message.classList.add("bg-danger");
+                message.innerHTML = "please enter all fields";
+                setTimeout(() => message.remove(), 1000);
+            }
+            else{
+                let expItem = {
+                    amount : expAmt.value,
+                    description : expDesc.value,
+                    category : expCat.value
+                }
+                const res = await axios.post(`http://localhost:3000/expenses/addExpense`,expItem);
+                console.log(res.data)
+                const { amount, description, category, id} = res.data;
+                console.log(id)
+                const li = document.createElement("li");
+                li.classList.add("list-group-item-warning")
+                const text = document.createTextNode(`${expAmt.value}-${expDesc.value}-${expCat.value}`);
+                const deleteBtn = document.createElement("button");
+                const editBtn = document.createElement("button");
+                deleteBtn.classList.add("btn","btn-danger","btn-close");
+                editBtn.classList.add("btn","btn-sm","btn-primary");
+                editBtn.innerHTML = "Edit";
+                li.appendChild(text);
+                li.appendChild(deleteBtn);
+                li.appendChild(editBtn);
+                expList.appendChild(li);
+                window.location.reload();
+            }
+        }
+        catch(err) {
+            if(error.response) {
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            }
+            else if(error.request) {
+                console.log(error.request);
+            }
+            else{
+                console.log({'Error' : error.message});
+            }
+        }    
+    }
+
+    async function deleteExpense(e) {
+    try {
+        e.preventDefault();
+        let id;
+        if(e.target.classList && e.target.classList.contains('btn-close')){
+            let li = e.target.parentNode.firstChild.wholeText.split('-');
+            const readExp = await axios.get(`http://localhost:3000/expenses/getExpenses`);
+            readExp.data.forEach(expense => {
+                if(expense.amount === +li[0] && expense.description === li[1] && expense.category === li[2]) {
+                    id = expense.id;
+                }
+            }) 
+        }
+        const res = await axios.get(`http://localhost:3000/expenses/deleteExpense`,{
+          params : {
+            id : id
+          }
+        });
+        console.log("deleted expense",res);
+        window.location.reload();
+    }
+    catch(error) {
+        if(error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        }
+        else if(error.request) {
+            console.log(error.request);
+        }
+        else{
+            console.log({'Error' : error.message});
+        }
+    }
+}
+
+
+async function editExpense(e, expItem, id) {
+    try{
+        e.preventDefault();
+        const editRes = await axios.get(`http://localhost:3000/expenses/editExpense`, {
+          params : {
+            id : id,
+            expenseItem : expItem
+          }
+        });
+        console.log("edited item");
+        window.location.reload();
+    }
+    catch(error) {
+        if(error.response) {
+            console.log(error.response.status);
+            console.log(error.response.headers);
+        }
+        else if(error.request) {
+            console.log(error.request);
+        }
+        else{
+            console.log({'Error' : error.message});
+        }  
+    }
+}
+var id;
+
+expList.addEventListener('click', async (e) => {
+    if(e.target.classList && e.target.classList.contains('btn-close')){
+        deleteExpense(e);
+    }
+    else {
+        e.preventDefault();
+        let button = document.querySelector("#Button");
+        button.innerHTML = "update";
+        const [amount, description, category] = e.target.parentNode.firstChild.wholeText.split('-');
+        document.querySelector("#expAmount").setAttribute('value', amount);
+        document.querySelector("#expDescription").setAttribute('value', description);
+        document.querySelector("#expCategory").setAttribute('value', category);
+        let li = e.target.parentNode.firstChild.wholeText.split('-');
+        const readExp = await axios.get(`http://localhost:3000/expenses/getExpenses`);
+        readExp.data.forEach(expense => {
+            if(expense.amount === +li[0] && expense.description === li[1] && expense.category === li[2]) {
+                id = expense.id;
+            }
+        }) 
+    }
+});
+
+  document.addEventListener('DOMContentLoaded',getExpenses);
+
+  var expenseId, expItem;
+
+  myForm.addEventListener('click', (e) => {
+    if(e.target.innerHTML === "Submit") {
+       addExpense(e);
+    }
+    else if(e.target.innerHTML === "update") {
+        expItem = {
+            amount : document.querySelector("#expAmount").value,
+            description : document.querySelector("#expDescription").value,
+            category : document.querySelector("#expCategory").value
+        }
+        editExpense(e, expItem, id);
+    }
+});
+</script>
 </html>

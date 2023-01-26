@@ -71,6 +71,9 @@
           })
           console.log(res);
           document.querySelector('.message').innerHTML = `${res.data.message}`;
+          setTimeout(()=> {
+            window.location.href = 'http://localhost:3000/expenses/index.html'
+          },1000)
           }
           catch(err) {
             console.log(err);
