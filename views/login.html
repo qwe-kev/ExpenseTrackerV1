@@ -70,10 +70,12 @@
               password : password
           })
           console.log(res);
-          document.querySelector('.message').innerHTML = `${res.data.message}`;
-          setTimeout(()=> {
+		  document.querySelector('.message').innerHTML = `${res.data.message}`;
+		  if(res.data.status === 200) {
+			setTimeout(()=> {
             window.location.href = 'http://localhost:3000/expenses/index.html'
           },1000)
+		  }
           }
           catch(err) {
             console.log(err);

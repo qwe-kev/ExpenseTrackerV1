@@ -1,0 +1,122 @@
+.container {
+    
+    /* width: 100%;
+    height: 100%;
+    /* background-color: #d4d3d3; */
+    /* padding: 20px; */ 
+    display: flex;
+  justify-content: center;
+    
+}
+
+.listWrap {
+    
+    height: 800px;
+    width: 800px;
+    
+}
+
+.expList {
+    
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: table;
+    white-space: nowrap;
+    width: 100%;
+    
+}
+
+.expList li {
+    
+    background-color: #f0f0f0;
+    display: table-row;
+    color: #5c5c5c;
+
+}
+
+.expList li:nth-child(odd) {
+    
+    background-color: #fff;
+    display: table-row;
+    font-size: 9pt;
+    color: #000;
+
+}
+
+.expList li:nth-child(odd):hover {
+    
+    background-color: #FFAEAE;
+
+}
+
+.expList li:nth-child(even) {
+    
+    background-color: #fff;
+    display: table-row;
+    font-size: 9pt;
+    color: #000;
+
+}
+
+.expList li:nth-child(even):hover {
+    
+    background-color: #FFAEAE;
+
+}
+
+.expList li:nth-child(1) span:first-child {
+    
+    border-top-left-radius: 6px;
+    
+}
+
+.expList li:nth-child(1) span:last-child {
+    
+    border-top-right-radius: 6px;
+    
+}
+
+
+.expList li:nth-child(1) {
+    
+    background-color: #e3f2fd;
+    text-transform: uppercase;
+    font-size: 8pt;
+    font-weight: bold;
+    color: #000;
+
+    
+}
+
+.expList li:nth-child(1):hover {
+    
+
+    
+}
+
+
+
+.expList li:nth-child(1) span {
+    
+    border-bottom: 2px solid #7d5bbe;
+    padding: 14px;
+    
+}
+
+.expList span {
+    
+    text-align: center;
+    display: table-cell;
+    padding: 6px;
+    vertical-align: middle;
+    
+}
+
+
+.expList span:nth-child(2) {
+    
+    
+}
+
+

@@ -34,7 +34,7 @@ router.get('/deleteExpense', (req, res, next) => {
 
 router.get('/editExpense', (req, res, next) => {
     const id = req.query.id;
-    const {amount, description, category} = JSON.parse(req.query.expenseItem);
+    const {amount, description, category} = req.query.expenseItem;
     Expense.findByPk(id)
     .then(expense => {
         expense.amount = amount;
