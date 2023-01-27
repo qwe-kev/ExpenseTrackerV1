@@ -4,11 +4,16 @@ const path = require('path');
 const rootDir = path.dirname(require.main.filename);
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const saltRounds = 10;
 
 const hashPassword = async function(password) {
     return await bcrypt.hash(password, saltRounds);
+}
+
+const generateToken = function(id, email) {
+    return jwt.sign({userId : id, email}, process.env.SECRET_KEY, {expiresIn : "2h"});
 }
 
 const checkUser = async function(password, hash) {
@@ -44,7 +49,11 @@ router.post('/createUser', (req, res, next) => {
     })
 })
 
+
+
 router.post('/login', (req, res, next) => {
+    let userId;
+    let verifiedUser;
     const email = req.body.email;
     const password = req.body.password;
     return User.findAll({
@@ -54,6 +63,7 @@ router.post('/login', (req, res, next) => {
     })
     .then((user) => {
         if(user.length > 0) {
+            verifiedUser = user[0].dataValues;
             return checkUser(password, user[0].dataValues.password);
         }
         else{
@@ -62,7 +72,7 @@ router.post('/login', (req, res, next) => {
     })
     .then(result => {
         if(result) {
-            res.json({status :200, message : "Successfully logged in"})
+            res.json({status :200, message : "Successfully logged in", token : generateToken(verifiedUser.id, verifiedUser.email)});
         }
         else {
             res.json({status : 401, message : "User not authorized"});

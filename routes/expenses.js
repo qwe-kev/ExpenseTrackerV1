@@ -4,21 +4,21 @@ const path = require('path');
 const rootDir = path.dirname(require.main.filename);
 const User = require('../models/user');
 const Expense = require('../models/expense');
+const verifyToken = require('../middleware/auth');
 
 router.get('/index.html', (req, res, next) => {
     res.sendFile(path.join(rootDir, 'views', 'index.html'))
 })
 
-router.get('/getExpenses', (req, res, next) => {
-    Expense.findAll()
+router.get('/getExpenses',verifyToken, (req, res, next) => {
+    Expense.findAll({where : {userId : req.user.userId}})
     .then(expenses => {
         res.status(200).json(expenses);
     })
 })
 
-router.get('/deleteExpense', (req, res, next) => {
+router.get('/deleteExpense', verifyToken, (req, res, next) => {
     const id = req.query.id;
-    console.log("inside delete router", id);
     Expense.findByPk(id)
     .then(expense => {
         console.log("found expense", expense);
@@ -32,7 +32,7 @@ router.get('/deleteExpense', (req, res, next) => {
     })
 })
 
-router.get('/editExpense', (req, res, next) => {
+router.get('/editExpense', verifyToken, (req, res, next) => {
     const id = req.query.id;
     const {amount, description, category} = req.query.expenseItem;
     Expense.findByPk(id)
@@ -51,15 +51,17 @@ router.get('/editExpense', (req, res, next) => {
     })
 })
 
-router.post('/addExpense', (req, res, next) => {
+router.post('/addExpense', verifyToken, (req, res, next) => {
     const amount = req.body.amount;
     const description = req.body.description;
     const category = req.body.category;
-    console.log("inside router", amount, description, category);
+    const userId = req.user.userId;
+
     Expense.create({
         amount : amount,
         description : description,
-        category : category
+        category : category,
+        userId : userId
     })
     .then(expense => {
         res.status(200).json({"expense Item" : expense, "message" : "Successfully added expense"})
