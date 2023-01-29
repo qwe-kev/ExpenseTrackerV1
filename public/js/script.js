@@ -5,25 +5,37 @@ const expCat = document.querySelector("#expCategory");
 const message = document.querySelector(".msg");
 const expList = document.querySelector(".expList");
 const buttonSubmit = document.querySelector("#Button");
-let expenses = 
-[
-  {
-      "id": 18,
-      "amount": 1000,
-      "description": "cookies",
-      "category": "food",
-      "createdAt": "2023-01-26T18:40:24.000Z",
-      "updatedAt": "2023-01-26T18:40:24.000Z"
-  },
-  {
-      "id": 19,
-      "amount": 8000,
-      "description": "electronics",
-      "category": "shopping",
-      "createdAt": "2023-01-26T18:40:24.000Z",
-      "updatedAt": "2023-01-26T18:40:24.000Z"
-  }
-]
+
+document.getElementById("razr").addEventListener('click', async function(e){
+    const token = localStorage.getItem('token');
+    console.log(token)
+    const res = await axios.get('http://localhost:3000/purchase/premiummembership',{headers : {"Authorization" : token}});
+    var options = {
+        "key" : res.data.key_id,
+        "order_id" : res.data.order.id,
+        "handler" : async function (response) {
+            await axios.post('http://localhost:3000/purchase/updateTransactionStatus', {
+                order_id : options.order_id,
+                payment_id : response.razorpay_payment_id,
+        }, { headers : {"Authorization" : token}})
+        
+        alert("You are now a Premium User");
+
+        }
+    }
+    const rzp = new Razorpay(options);
+    rzp.open();
+    e.preventDefault();
+
+    rzp.on('payment.failed', (response) => {
+        console.log(response);
+        alert("payment failed")
+    })
+})
+
+
+
+
 expList.addEventListener('click', (e) => {
 const span = e.target.parentElement.parentElement.parentElement.getElementsByTagName('span')[1];
 })
@@ -34,10 +46,12 @@ async function getExpenses(e) {
           
               headers: {"Authorization" : token}
           }
-          
-      
       const res = await axios.get('http://localhost:3000/expenses/getExpenses', config);
-      res.data.forEach(expense => {
+      console.log("res---", res);
+      if(res.data.userPlan === true) {
+        document.getElementById("razr").innerHTML = "You are a premium user"
+      }
+      res.data.expenses.forEach(expense => {
           const {amount, description, category} = expense;
           const li = document.createElement("li");
           //li.classList.add("list-group-item-warning")
@@ -139,7 +153,7 @@ async function deleteExpense(e) {
           let li = e.target.parentNode.parentNode.parentNode;
           const expenseSelected = [li.childNodes[0].textContent,li.childNodes[1].textContent,li.childNodes[2].textContent]
           const readExp = await axios.get(`http://localhost:3000/expenses/getExpenses`, {headers: {"Authorization" : token}});
-          readExp.data.forEach(expense => {
+          readExp.data.expenses.forEach(expense => {
               if(expense.amount === +expenseSelected[0] && expense.description === expenseSelected[1] && expense.category === expenseSelected[2]) {
                   id = expense.id;
               }
@@ -221,7 +235,7 @@ expList.addEventListener('click', async (e) => {
       document.querySelector("#expCategory").setAttribute('value', category);
      // li = e.target.parentNode.firstChild.wholeText.split('-');
       const readExp = await axios.get(`http://localhost:3000/expenses/getExpenses`, config);
-      readExp.data.forEach(expense => {
+      readExp.data.expenses.forEach(expense => {
           if(expense.amount === +expenseSelected[0] && expense.description === expenseSelected[1] && expense.category === expenseSelected[2]) {
               id = expense.id;
           }

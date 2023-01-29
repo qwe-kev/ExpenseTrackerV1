@@ -58,17 +58,20 @@
             const name = document.querySelector('#name').value;
             const email = document.querySelector('#email').value;
             const password = document.querySelector('#password-field').value;
+			console.log(name, email, password);
+
             const res = await axios.post('http://localhost:3000/users/createUser', {
               name : name, 
               email : email,
               password : password
           })
+		  console.log("res", res)
           document.querySelector('.message').innerHTML = "Cheers! created account";
 		  window.location.replace("http://localhost:3000/users/login");
           }
           catch(err) {
             console.log("ERROR!!!", err);
-			document.querySelector('.message').innerHTML = "Email is already registered!";
+			document.querySelector('.message').innerHTML = err;
           }
         }
       

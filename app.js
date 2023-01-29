@@ -8,9 +8,15 @@ const User = require('./models/user');
 
 const Expense = require('./models/expense');
 
+const Order = require('./models/order');
+
 const auth = require('./middleware/auth');
 
+const cors = require('cors')
+ 
 const app = express();
+
+app.use(cors())
 
 const {API_PORT} = process.env;
 
@@ -21,6 +27,8 @@ app.set('views', 'views');
 const userRoutes = require('./routes/users');
 
 const expenseRoutes = require('./routes/expenses');
+
+const purchaseRoutes = require('./routes/purchase')
 
 app.use(express.static("public"));
 
@@ -34,9 +42,15 @@ app.use('/users', userRoutes)
 
 app.use('/expenses', expenseRoutes);
 
-Expense.belongsTo(User, {constraints : true, onDelete : 'CASCADE'});
+app.use('/purchase', purchaseRoutes);
+
+Expense.belongsTo(User);
 
 User.hasMany(Expense);
+
+Order.belongsTo(User);
+
+User.hasMany(Order);
 
 sequelize.sync()
 .then(() => {

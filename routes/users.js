@@ -13,7 +13,7 @@ const hashPassword = async function(password) {
 }
 
 const generateToken = function(id, email) {
-    return jwt.sign({userId : id, email}, process.env.SECRET_KEY, {expiresIn : "2h"});
+    return jwt.sign({userId : id, email}, process.env.SECRET_KEY, {expiresIn : "24h"});
 }
 
 const checkUser = async function(password, hash) {

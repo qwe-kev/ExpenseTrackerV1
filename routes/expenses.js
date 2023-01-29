@@ -6,14 +6,20 @@ const User = require('../models/user');
 const Expense = require('../models/expense');
 const verifyToken = require('../middleware/auth');
 
+let isPremium;
+
 router.get('/index.html', (req, res, next) => {
     res.sendFile(path.join(rootDir, 'views', 'index.html'))
 })
 
 router.get('/getExpenses',verifyToken, (req, res, next) => {
+    User.findByPk(req.user.userId)
+    .then(user => {
+        isPremium = user.isPremium;
+    })
     Expense.findAll({where : {userId : req.user.userId}})
     .then(expenses => {
-        res.status(200).json(expenses);
+        res.status(200).json({expenses : expenses, userPlan : isPremium});
     })
 })
 
