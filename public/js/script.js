@@ -35,44 +35,47 @@ document.getElementById("razr").addEventListener('click', async function(e){
 
 document.getElementById('leaderboard').addEventListener('click', async function(e) {
     try{
-        var x = document.querySelector(".leaderboardList");
-
-       
+        var leaderboardList = document.querySelector(".leaderboardList");
             // array of array [ [ 'kev', 1000 ], [ 'tim', 800 ] ]
-        x.innerHTML = "";
+        leaderboardList.innerHTML = "";
 
-        if (x.style.display === "none") {
-            const res = await axios.get('http://localhost:3000/expenses/leaderboard');
+        if (leaderboardList.style.display === "none") {
+            const res = await axios.get('http://localhost:3000/expenses/getLeaderboard');
             console.log("leader board", res)
             const leaderboard = res.data.leaderboard;
             console.log("leader board array", leaderboard)
+            const idTitle = document.createElement("span");
             const nameTitle = document.createElement("span");
             const expenseTitle = document.createElement("span");
+            idTitle.appendChild(document.createTextNode("id"));
             nameTitle.appendChild(document.createTextNode("name"));
             expenseTitle.appendChild(document.createTextNode("total expenses"));
             const titlesRow = document.createElement("li");
+            titlesRow.appendChild(idTitle);
             titlesRow.appendChild(nameTitle);
             titlesRow.appendChild(expenseTitle);
-            x.appendChild(titlesRow);
-            leaderboard.forEach(item => {
+            leaderboardList.appendChild(titlesRow);
+            leaderboard.forEach(user => {
                 const li = document.createElement("li");
                 const nameSpan = document.createElement("span");
                 const expenseSpan = document.createElement("span");
-                const textNodeUser = document.createTextNode(`${item[0]}`);
-                const textNodeExpense = document.createTextNode(`${item[1]}`);
+                const idSpan = document.createElement("span");
+                const textNodeId = document.createTextNode(`${user.id}`);
+                const textNodeUser = document.createTextNode(`${user.name}`);
+                const textNodeExpense = document.createTextNode(`${user.total}`);
+                idSpan.appendChild(textNodeId);
                 nameSpan.appendChild(textNodeUser);
                 expenseSpan.appendChild(textNodeExpense);
+                li.appendChild(idSpan);
                 li.appendChild(nameSpan);
                 li.appendChild(expenseSpan);
-                x.appendChild(li);
+                leaderboardList.appendChild(li);
             })
-            x.style.display = "table";
+            leaderboardList.style.display = "table";
             
         } else {
-            x.style.display = "none";
+            leaderboardList.style.display = "none";
         }
-
-       
     }
     catch(err) {
         console.log(err);

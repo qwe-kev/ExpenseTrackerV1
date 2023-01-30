@@ -38,6 +38,8 @@ app.use(express.urlencoded({extended : true}))
 
 app.use('/', userRoutes); 
 
+app.use('/users/password', userRoutes);
+
 app.use('/users', userRoutes)
 
 app.use('/expenses', expenseRoutes);
