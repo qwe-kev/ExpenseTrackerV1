@@ -1,10 +1,10 @@
-const express = require('express');
-const router = express.Router();
 const path = require('path');
 const rootDir = path.dirname(require.main.filename);
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Sib = require('sib-api-v3-sdk');
+require('dotenv').config();
 
 const saltRounds = 10;
 
@@ -88,13 +88,46 @@ module.exports.loginUser = (req, res, next) => {
  module.exports.postForgotPassword = async(req, res, next) => {
     try {
         const email = req.body.email;
-        const password = req.body.password;
-        const newPassword = await hashPassword(password);
-        const user = await User.update(
-            {password : newPassword},
-            {where : {email : email}}
-        )
-        res.status(200).json({status : 200, message : "successfully changed password"});
+            
+        const client = Sib.ApiClient.instance;
+
+        const apiKey = client.authentications['api-key'];
+
+        apiKey.apiKey = process.env.SEND_IN_BLUE_API_KEY;
+
+        const transEmailApi = new Sib.TransactionalEmailsApi()
+
+        const sender = {
+            email : 'kevray39@gmail.com',
+            name : 'Kevin'
+        }
+
+        const recievers = [
+        {
+            email : `${email}`
+        },
+        ]
+        
+        const emailResponse = await transEmailApi.sendTransacEmail({
+            sender,
+            To : recievers,
+            subject : 'Password reset link',
+            textContent : 'hey  here to reset your password',
+            htmlContent : `<h1>Hey {{params.name}} Your password reset link<h1>
+            <a href="http://localhost:3000/users/password/forgotpassword">Reset</a>`,
+            params : {
+                name : 'kevin'
+            }
+        })
+
+        console.log("-----Email response---",emailResponse)
+        // const password = req.body.password;
+        // const newPassword = await hashPassword(password);
+        // const user = await User.update(
+        //     {password : newPassword},
+        //     {where : {email : email}}
+        // )
+        // res.status(200).json({status : 200, message : "successfully changed password"});
     }
     catch(err) {
         console.log(err);
