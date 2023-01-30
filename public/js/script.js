@@ -33,7 +33,51 @@ document.getElementById("razr").addEventListener('click', async function(e){
     })
 })
 
+document.getElementById('leaderboard').addEventListener('click', async function(e) {
+    try{
+        var x = document.querySelector(".leaderboardList");
 
+       
+            // array of array [ [ 'kev', 1000 ], [ 'tim', 800 ] ]
+        x.innerHTML = "";
+
+        if (x.style.display === "none") {
+            const res = await axios.get('http://localhost:3000/expenses/leaderboard');
+            console.log("leader board", res)
+            const leaderboard = res.data.leaderboard;
+            console.log("leader board array", leaderboard)
+            const nameTitle = document.createElement("span");
+            const expenseTitle = document.createElement("span");
+            nameTitle.appendChild(document.createTextNode("name"));
+            expenseTitle.appendChild(document.createTextNode("total expenses"));
+            const titlesRow = document.createElement("li");
+            titlesRow.appendChild(nameTitle);
+            titlesRow.appendChild(expenseTitle);
+            x.appendChild(titlesRow);
+            leaderboard.forEach(item => {
+                const li = document.createElement("li");
+                const nameSpan = document.createElement("span");
+                const expenseSpan = document.createElement("span");
+                const textNodeUser = document.createTextNode(`${item[0]}`);
+                const textNodeExpense = document.createTextNode(`${item[1]}`);
+                nameSpan.appendChild(textNodeUser);
+                expenseSpan.appendChild(textNodeExpense);
+                li.appendChild(nameSpan);
+                li.appendChild(expenseSpan);
+                x.appendChild(li);
+            })
+            x.style.display = "table";
+            
+        } else {
+            x.style.display = "none";
+        }
+
+       
+    }
+    catch(err) {
+        console.log(err);
+    }
+})
 
 
 expList.addEventListener('click', (e) => {

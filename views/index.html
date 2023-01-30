@@ -13,67 +13,15 @@
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/css/expList.css">
+  <link rel="stylesheet" href="/css/main.css">
 	<script defer src="/js/script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
   </head>
   <style>
-    body{
-        background-image: url('https://www.psohub.com/hubfs/Blog%20visuals/12_Make-Time-%26-Expense-Reporting-Suck-Less_541x290.png');
-        background-size: cover;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-       
-    }
-    form, input, label {
-    color: #000 !important;
-    }
-    /* style="background-color: #e3f2fd; background:transparent;" */
     
-.btn-arrow-right {
-    position: relative;
-    padding-left: 18px;
-    padding-right: 18px;
-}
-.btn-arrow-right {
-    padding-left: 36px;
-}
 
-.btn-arrow-right:before,
-.btn-arrow-right:after { /* make two squares (before and after), looking similar to the button */
-    content:"";
-    position: absolute;
-    top: 5px; /* move it down because of rounded corners */
-    width: 22px; /* same as height */
-    height: 22px; /* button_outer_height / sqrt(2) */
-    background: inherit; /* use parent background */
-    border: inherit; /* use parent border */
-    border-left-color: transparent; /* hide left border */
-    border-bottom-color: transparent; /* hide bottom border */
-    border-radius: 0px 4px 0px 0px; /* round arrow corner, the shorthand property doesn't accept "inherit" so it is set to 4px */
-    -webkit-border-radius: 0px 4px 0px 0px;
-    -moz-border-radius: 0px 4px 0px 0px;
-}
-.btn-arrow-right:before,
-.btn-arrow-right:after {
-    transform: rotate(45deg); /* rotate right arrow squares 45 deg to point right */
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-}
-.btn-arrow-right:before
- { /* align the "before" square to the left */
-    left: -11px;
-}
-.btn-arrow-right:after
- { /* align the "after" square to the right */
-    right: -11px;
-}
-.btn-arrow-right:after { /* bring arrow pointers to front */
-    z-index: 1;
-}
-.btn-arrow-right:before{ /* hide arrow tails background */
-    background-color: white;
-}
+
+
   </style>
 <body>
   <nav class="navbar navbar-expand-md navbar-light opacity-80" style="background-color:#9ad1aa;">
@@ -122,10 +70,13 @@
         </form>
         </div>
        <br>
+       
   <div class="container opacity-75">
 
     <div class="listWrap">
       <button type="button"  id="razr" class="btn btn-sm btn-success btn-arrow-right">Go Premium</button>
+      <button type="button"  id="leaderboard" class="btn btn-sm btn-info btn-arrow-right">
+        Show leaderboard</button>
          <ul class="expList">
           
             <li>
@@ -137,11 +88,16 @@
             </li>
            
         </ul>
-
+        <br>
+        <ul class="leaderboardList" style="width:300px; display: none;">
+      </ul>
     </div>
-
+   
 </div>
+
 <!-- <button type="button" id="razr">Premium Membership</button> -->
+<br>
+
 
 </body>
 <script defer src="https://checkout.razorpay.com/v1/checkout.js"></script>

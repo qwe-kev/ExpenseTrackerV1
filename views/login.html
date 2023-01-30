@@ -69,14 +69,13 @@
               email : email,
               password : password
           })
-          console.log(res);
 		  document.querySelector('.message').innerHTML = `${res.data.message}`;
 		  
             
 			localStorage.setItem('token', res.data.token);
-			console.log("token", res.data.token)
-			console.log(res);
-			window.location.href = 'http://localhost:3000/expenses/index.html'
+			if(res.data.status === 200 && res.data.message === "Successfully logged in"){
+				window.location.href = 'http://localhost:3000/expenses/index.html';
+			}
 		  
           }
           catch(err) {

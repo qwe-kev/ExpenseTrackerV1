@@ -5,6 +5,7 @@ const rootDir = path.dirname(require.main.filename);
 const User = require('../models/user');
 const Expense = require('../models/expense');
 const verifyToken = require('../middleware/auth');
+const premiumFeaturesController = require('../controllers/premiumFeatures');
 
 let isPremium;
 
@@ -77,5 +78,7 @@ router.post('/addExpense', verifyToken, (req, res, next) => {
         console.log(err);
     })
 })
+
+router.get('/leaderboard', premiumFeaturesController.showLeaderboard);
 
 module.exports = router;
