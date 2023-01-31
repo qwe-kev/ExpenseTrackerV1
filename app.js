@@ -10,6 +10,8 @@ const Expense = require('./models/expense');
 
 const Order = require('./models/order');
 
+const ForgotPasswordRequest = require('./models/ForgotPasswordRequests');
+
 const auth = require('./middleware/auth');
 
 const cors = require('cors')
@@ -30,13 +32,17 @@ const expenseRoutes = require('./routes/expenses');
 
 const purchaseRoutes = require('./routes/purchase')
 
+const forgotPasswordRoutes = require('./routes/forgotpassword');
+
 app.use(express.static("public"));
 
 app.use(express.json());
 
 app.use(express.urlencoded({extended : true}))
 
-app.use('/', userRoutes); 
+app.use('/', userRoutes);
+
+app.use('/password', forgotPasswordRoutes);
 
 app.use('/users/password', userRoutes);
 
@@ -53,6 +59,10 @@ User.hasMany(Expense);
 Order.belongsTo(User);
 
 User.hasMany(Order);
+
+ForgotPasswordRequest.belongsTo(User);
+
+User.hasMany(ForgotPasswordRequest);
 
 sequelize.sync()
 .then(() => {
