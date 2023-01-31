@@ -118,7 +118,215 @@
     
     
 }
+/* -----------------------monthy expenses css-------------------- */
 
+.monthly-expList {
+    
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: table;
+    white-space: nowrap;
+    width: 100%;
+    
+}
+
+.monthly-expList li {
+    
+    background-color: #f0f0f0;
+    display: table-row;
+    color: #5c5c5c;
+
+}
+
+.monthly-expList li:nth-child(odd) {
+    
+    background-color: #fff;
+    display: table-row;
+    font-size: 9pt;
+    color: #000;
+
+}
+
+.monthly-expList li:nth-child(odd):hover {
+    
+    background-color: #FFAEAE;
+
+}
+
+.monthly-expList li:nth-child(even) {
+    
+    background-color: #fff;
+    display: table-row;
+    font-size: 9pt;
+    color: #000;
+
+}
+
+.monthly-expList li:nth-child(even):hover {
+    
+    background-color: #FFAEAE;
+
+}
+
+.monthly-expList li:nth-child(1) span:first-child {
+    
+    border-top-left-radius: 6px;
+    
+}
+
+.monthly-expList li:nth-child(1) span:last-child {
+    
+    border-top-right-radius: 6px;
+    
+}
+
+
+.monthly-expList li:nth-child(1) {
+    
+    background-color: #e3f2fd;
+    text-transform: uppercase;
+    font-size: 8pt;
+    font-weight: bold;
+    color: #000;
+
+    
+}
+
+.monthly-expList li:nth-child(1):hover {
+    
+
+    
+}
+
+
+
+.monthly-expList li:nth-child(1) span {
+    
+    border-bottom: 2px solid #7d5bbe;
+    padding: 14px;
+    
+}
+
+.monthly-expList span {
+    
+    text-align: center;
+    display: table-cell;
+    padding: 6px;
+    vertical-align: middle;
+    
+}
+
+
+.monthly-expList span:nth-child(2) {
+    
+    
+}
+/* -----------------------yearly expenses css----------------- */
+.yearly-expList {
+    
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: table;
+    white-space: nowrap;
+    width: 100%;
+    
+}
+
+.yearly-expList li {
+    
+    background-color: #f0f0f0;
+    display: table-row;
+    color: #5c5c5c;
+
+}
+
+.yearly-expList li:nth-child(odd) {
+    
+    background-color: #fff;
+    display: table-row;
+    font-size: 9pt;
+    color: #000;
+
+}
+
+.yearly-expList li:nth-child(odd):hover {
+    
+    background-color: #FFAEAE;
+
+}
+
+.yearly-expList li:nth-child(even) {
+    
+    background-color: #fff;
+    display: table-row;
+    font-size: 9pt;
+    color: #000;
+
+}
+
+.yearly-expList li:nth-child(even):hover {
+    
+    background-color: #FFAEAE;
+
+}
+
+.yearly-expList li:nth-child(1) span:first-child {
+    
+    border-top-left-radius: 6px;
+    
+}
+
+.yearly-expList li:nth-child(1) span:last-child {
+    
+    border-top-right-radius: 6px;
+    
+}
+
+
+.yearly-expList li:nth-child(1) {
+    
+    background-color: #e3f2fd;
+    text-transform: uppercase;
+    font-size: 8pt;
+    font-weight: bold;
+    color: #000;
+
+    
+}
+
+.yearly-expList li:nth-child(1):hover {
+    
+
+    
+}
+
+
+
+.yearly-expList li:nth-child(1) span {
+    
+    border-bottom: 2px solid #7d5bbe;
+    padding: 14px;
+    
+}
+
+.yearly-expList span {
+    
+    text-align: center;
+    display: table-cell;
+    padding: 6px;
+    vertical-align: middle;
+    
+}
+
+
+.yearly-expList span:nth-child(2) {
+    
+    
+}
+
+/* -----------------------leaderboard css-------------------- */
 .leaderboardList {
     
     
@@ -212,3 +420,4 @@
     
 }
 
+/* ------------------------------------------- */

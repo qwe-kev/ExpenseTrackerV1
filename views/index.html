@@ -75,9 +75,12 @@
 
     <div class="listWrap">
       <button type="button"  id="razr" class="btn btn-sm btn-success btn-arrow-right">Go Premium</button>
-      <button type="button"  id="leaderboard" class="btn btn-sm btn-info btn-arrow-right">
-        Show leaderboard</button>
-         <ul class="expList">
+      <button type="button"  id="leaderboard" class="btn btn-sm btn-info btn-arrow-right">Show leaderboard</button>
+      <button type="button"  id="reports" style="float: right;" class="btn btn-sm btn-danger btn-arrow-right">Show Reports</button>
+      <hr>
+      <h3 class="fs-6 fw-bolder text-dark">Daily Expenses <button type="button"  id="download-monthly" style="float: right;" class="btn btn-sm btn-light text-dark btn-arrow-right">Download report</button>
+      </h3>  
+      <ul class="expList">
           
             <li>
                 <span>Amount</span>
@@ -88,6 +91,37 @@
             </li>
            
         </ul>
+        <br>
+        <div id="show-reports"  style="display:none;">
+          <h3 class="fs-6 fw-bolder text-dark Monthly-heading">Monthly Expenses  <button type="button"  id="download-monthly" style="float: right;" class="btn btn-sm btn-light text-dark btn-arrow-right">Download report</button></h3>  
+
+        <ul class="monthly-expList">
+          
+          <li>
+              <span>Amount</span>
+              <span>Description</span>
+              <span>Category</span>
+              <span>Actions</span>
+              <span></span>
+          </li>
+         
+      </ul>
+      <br>
+      <h3 class="fs-6 fw-bolder text-dark Yearly-heading">Yearly Expenses  <button type="button"  id="download-monthly" style="float: right;" class="btn btn-sm btn-light text-dark btn-arrow-right">Download report</button></h3>  
+
+      <ul class="yearly-expList">
+          
+        <li>
+            <span>Amount</span>
+            <span>Description</span>
+            <span>Category</span>
+            <span>Actions</span>
+            <span></span>
+        </li>
+       
+    </ul>
+        </div>
+        
         <br>
         <ul class="leaderboardList" style="width:300px; display: none;">
       </ul>

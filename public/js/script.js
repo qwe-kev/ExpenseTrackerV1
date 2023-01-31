@@ -33,6 +33,8 @@ document.getElementById("razr").addEventListener('click', async function(e){
     })
 })
 
+
+
 document.getElementById('leaderboard').addEventListener('click', async function(e) {
     try{
         var leaderboardList = document.querySelector(".leaderboardList");
@@ -82,10 +84,19 @@ document.getElementById('leaderboard').addEventListener('click', async function(
     }
 })
 
+document.getElementById('reports').addEventListener('click', async function(e) {
+   var showReports = document.querySelector('#show-reports');
+   if(showReports.style.display === 'none') {
+        showReports.style.display = '';
+   } else{
+    showReports.style.display = 'none';
+   }
+})
 
 expList.addEventListener('click', (e) => {
 const span = e.target.parentElement.parentElement.parentElement.getElementsByTagName('span')[1];
 })
+
 async function getExpenses(e) {
   try {
       const token = localStorage.getItem('token');
@@ -95,8 +106,17 @@ async function getExpenses(e) {
           }
       const res = await axios.get('http://localhost:3000/expenses/getExpenses', config);
       console.log("res---", res);
+      console.log("dataplan", res.data.userPlan)
       if(res.data.userPlan === true) {
-        document.getElementById("razr").innerHTML = "You are a premium user"
+          document.getElementById("razr").innerHTML = "You are a premium user";
+      }
+      else if(res.data.userPlan == null){
+        document.querySelector("#download-monthly").style.display = 'none';
+        document.querySelector(".Monthly-heading").style.display = 'none';
+        document.querySelector(".Yearly-heading").style.display = 'none';
+        document.querySelector(".monthly-expList").style.display = 'none';
+        document.querySelector(".yearly-expList").style.display = 'none';
+        document.querySelector("#reports").style.display = 'none';
       }
       res.data.expenses.forEach(expense => {
           const {amount, description, category} = expense;
