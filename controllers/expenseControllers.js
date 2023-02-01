@@ -11,15 +11,41 @@ module.exports.showindex = (req, res, next) => {
     res.sendFile(path.join(rootDir, 'views', 'index.html'))
 }
 
-module.exports.getExpenses = (req, res, next) => {
-    User.findByPk(req.user.userId)
-    .then(user => {
-        isPremium = user.isPremium;
-    })
-    Expense.findAll({where : {userId : req.user.userId}})
-    .then(expenses => {
-        res.status(200).json({expenses : expenses, userPlan : isPremium});
-    })
+module.exports.getExpenses = async (req, res, next) => {
+    try {
+        const pageNumber = req.query.page;
+        User.findByPk(req.user.userId)
+        .then(user => {
+            isPremium = user.isPremium;
+        })
+        if(pageNumber) {
+            const limit = 3;
+        const offset = (pageNumber - 1) * limit;
+        const totalRecords = await Expense.count({
+            where: {
+               userId : req.user.userId
+            }
+          });
+        const pagesRequired = ~~((totalRecords - 1) / limit) + 1;
+        const pageDetails = {pagesRequired : pagesRequired, totalRecords : totalRecords}
+        
+            Expense.findAll({where : {userId : req.user.userId}, offset: offset, limit: limit })
+        .then(expenses => {
+            res.status(200).json({expenses : expenses, userPlan : isPremium, pageDetails});
+        })
+        }
+        else{
+            Expense.findAll({where : {userId : req.user.userId} })
+        .then(expenses => {
+            res.status(200).json({expenses : expenses, userPlan : isPremium});
+        })
+        } 
+    }
+    catch(err) {
+        console.log(err);
+        res.json(err);
+    }
+   
 }
 
 module.exports.deleteExpense = (req, res, next) => {

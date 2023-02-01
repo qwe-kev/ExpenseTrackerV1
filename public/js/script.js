@@ -7,6 +7,85 @@ const expList = document.querySelector(".expList");
 const buttonSubmit = document.querySelector("#Button");
 let userPlan;
 
+
+document.querySelector(".pagination").addEventListener('click', async(e) => {
+    try {
+        const token = localStorage.getItem('token');
+      const page = e.target.id;
+      const config = {
+              headers: {"Authorization" : token}
+          }
+      const res = await axios.get(`http://localhost:3000/expenses/getExpenses/?page=${page}`, config);
+      userPlan = res.data.userPlan;
+      if(res.data.userPlan === true) {
+        document.getElementById("razr").innerHTML = "You are a premium user";
+    }
+    else if(res.data.userPlan == null){
+      document.querySelector(".Monthly-heading").style.display = 'none';
+      document.querySelector(".Yearly-heading").style.display = 'none';
+      document.querySelector(".monthly-expList").style.display = 'none';
+      document.querySelector(".yearly-expList").style.display = 'none';
+      document.querySelector("#reports").style.display = 'none';
+      document.querySelector('#leaderboard').style.display = 'none';
+      document.querySelector('#download-report').style.display = 'none';
+    }
+    const expListTitle = expList.firstElementChild;
+    expList.innerHTML = '';
+    expList.appendChild(expListTitle);
+    res.data.expenses.forEach(expense => {
+        const {amount, description, category} = expense;
+        const li = document.createElement("li");
+        //li.classList.add("list-group-item-warning")
+        const amountSpan = document.createElement("span");
+        const descriptionSpan = document.createElement("span");
+        const categorySpan = document.createElement("span");
+
+        const buttonSpan = document.createElement("span");
+
+        const buttonDiv = document.createElement("div");
+        buttonDiv.classList.add("btn-group","btn-group-xs");
+        buttonDiv.setAttribute('role', 'group');
+        buttonDiv.setAttribute('aria-label', '...');
+
+        const amountText = document.createTextNode(`${amount}`);
+        const descriptionText = document.createTextNode(`${description}`);
+        const categoryText= document.createTextNode(`${category}`);
+
+
+        const deleteBtn = document.createElement("button");
+        const editBtn = document.createElement("button");
+
+        deleteBtn.classList.add('btn','btn-sm','btn-default','btn-outline-dark','delete');
+        editBtn.classList.add('btn','btn-sm','btn-default','btn-outline-dark','edit');
+
+        deleteBtn.classList.add('delete');
+        editBtn.classList.add('edit');
+        editBtn.innerHTML = "Edit";
+        deleteBtn.innerHTML = "Delete"
+
+        buttonDiv.appendChild(editBtn);
+        buttonDiv.appendChild(deleteBtn);
+
+        buttonSpan.appendChild(buttonDiv);
+
+        amountSpan.appendChild(amountText);
+        descriptionSpan.appendChild(descriptionText);
+        categorySpan.appendChild(categoryText);
+        
+        li.appendChild(amountSpan);
+        li.appendChild(descriptionSpan);
+        li.appendChild(categorySpan);
+
+        li.appendChild(buttonSpan);
+        li.appendChild(document.createElement('span'));
+        expList.appendChild(li);
+    });
+    }
+    catch(err) {
+
+    }
+})
+
 document.getElementById("razr").addEventListener('click', async function(e){
     const token = localStorage.getItem('token');
     console.log(token)
@@ -126,12 +205,41 @@ const span = e.target.parentElement.parentElement.parentElement.getElementsByTag
 async function getExpenses(e) {
   try {
       const token = localStorage.getItem('token');
+      const page = 1;
       const config = {
-          
               headers: {"Authorization" : token}
           }
-      const res = await axios.get('http://localhost:3000/expenses/getExpenses', config);
+      const res = await axios.get(`http://localhost:3000/expenses/getExpenses/?page=${page}`, config);
       userPlan = res.data.userPlan;
+      if(res.data.pageDetails) {
+        const paginationList = document.querySelector('.pagination');
+        for(let i = 0;i < res.data.pageDetails.pagesRequired;i++) {
+            const li  = document.createElement("li");
+            const button = document.createElement("button");
+            li.classList.add("page-item");
+            button.classList.add("btn","btn","bg-light");
+            button.id = i+1;
+            button.innerHTML = i + 1;
+            li.appendChild(button);
+           paginationList.appendChild(li);
+        }
+        const nextPageList = document.createElement("li");
+        nextPageList.classList.add("page-item");
+        nextPageList.id = "nextList";
+        const button = document.createElement("button");
+        button.classList.add("btn","btn");
+        button.id = "next";
+        const span1 = document.createElement("span");
+        span1.setAttribute('aria-hidden','true');
+        span1.innerHTML = "&raquo";
+        const span2 = document.createElement("span");
+        span2.classList.add("sr-only");
+        span2.innerHTML = "Next";
+        button.appendChild(span1);
+        button.appendChild(span2);
+        nextPageList.appendChild(button);
+        paginationList.appendChild(nextPageList);
+      }
       if(res.data.userPlan === true) {
           document.getElementById("razr").innerHTML = "You are a premium user";
       }
