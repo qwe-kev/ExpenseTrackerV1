@@ -54,15 +54,15 @@ app.use('/purchase', purchaseRoutes);
 
 Expense.belongsTo(User);
 
-User.hasMany(Expense);
+User.hasMany(Expense,  { onDelete: 'CASCADE', hooks: true });
 
 Order.belongsTo(User);
 
-User.hasMany(Order);
+User.hasMany(Order,  { onDelete: 'CASCADE', hooks: true });
 
 ForgotPasswordRequest.belongsTo(User);
 
-User.hasMany(ForgotPasswordRequest);
+User.hasMany(ForgotPasswordRequest,  { onDelete: 'CASCADE', hooks: true });
 
 sequelize.sync()
 .then(() => {

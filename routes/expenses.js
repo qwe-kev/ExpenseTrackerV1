@@ -16,4 +16,6 @@ router.post('/addExpense', verifyToken, expenseControllers.addExpense);
 
 router.get('/getLeaderboard', premiumFeaturesController.showLeaderboard);
 
+router.get('/downloadExpenses', verifyToken, expenseControllers.downloadExpenses);
+
 module.exports = router;

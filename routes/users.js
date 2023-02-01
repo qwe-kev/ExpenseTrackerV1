@@ -11,8 +11,4 @@ router.post('/createUser', userController.newUser);
 
 router.post('/login', userController.loginUser);
 
-// router.get('/forgotpassword', userController.forgotPassword);
-
-// router.post('/forgotpassword', userController.postForgotPassword);
-
 module.exports = router;

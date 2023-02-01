@@ -2,6 +2,8 @@ const path = require('path');
 const rootDir = path.dirname(require.main.filename);
 const User = require('../models/user');
 const Expense = require('../models/expense');
+const S3 = require('aws-sdk/clients/s3');
+require('dotenv').config();
 
 let isPremium;
 
@@ -73,4 +75,49 @@ module.exports.addExpense =  (req, res, next) => {
         res.send(err);
         console.log(err);
     })
+}
+
+const uploadToS3 = async function(data, filename) {
+    try {
+        const BUCKET_NAME = process.env.AWS_BUCKET
+        const region = process.env.AWS_REGION
+        const accessKeyId = process.env.AWS_ACCESS_KEY_ID
+        const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+
+        const s3 = new S3({
+            region,
+            accessKeyId,
+            secretAccessKey
+         });
+
+        const uploadParams = {
+            Bucket : BUCKET_NAME,
+            Body : data,
+            Key : filename,
+            ACL : 'public-read'
+        };
+
+        return s3.upload(uploadParams).promise()
+    }
+    catch(err) {
+        console.log(err);
+    }
+    
+}
+
+module.exports.downloadExpenses = async(req, res, next) => {
+    try{
+        const userId = req.user.userId;
+        const expenses = await Expense.findAll(
+            {where : {userId : userId}}
+        )
+        const stringifiedExpenses = JSON.stringify(expenses);
+        const fileName = `Expense${req.user.userId}${new Date()}.txt`
+        const fileUrl = await uploadToS3(stringifiedExpenses, fileName);
+        res.status(200).json({fileUrl : fileUrl, message : 'success'});
+    }
+    catch(err) {
+        return res.status(500).json({fileUrl : '', error : err});
+    }
+   
 }

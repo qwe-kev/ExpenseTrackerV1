@@ -5,6 +5,7 @@ const expCat = document.querySelector("#expCategory");
 const message = document.querySelector(".msg");
 const expList = document.querySelector(".expList");
 const buttonSubmit = document.querySelector("#Button");
+let userPlan;
 
 document.getElementById("razr").addEventListener('click', async function(e){
     const token = localStorage.getItem('token');
@@ -20,7 +21,7 @@ document.getElementById("razr").addEventListener('click', async function(e){
         }, { headers : {"Authorization" : token}})
         
         alert("You are now a Premium User");
-
+        window.location.reload();
         }
     }
     const rzp = new Razorpay(options);
@@ -93,6 +94,31 @@ document.getElementById('reports').addEventListener('click', async function(e) {
    }
 })
 
+document.getElementById('download-report').addEventListener('click', async function(e) {
+    try{
+        if(!userPlan) {
+            console.log("unauthorized")
+            return new Error("Unauthorized");
+        }
+        else{
+            const token = localStorage.getItem('token');
+            const config = {
+              
+                  headers: {"Authorization" : token}
+              }
+            const res = await axios.get('http://localhost:3000/expenses/downloadExpenses',config);
+            const link = document.createElement('a');
+            link.href = res.data.fileUrl.Location;
+            link.download = 'expense_report.txt';
+            link.click();
+        }
+    }
+    catch(err) {
+        console.log(err);
+    }
+    
+})
+
 expList.addEventListener('click', (e) => {
 const span = e.target.parentElement.parentElement.parentElement.getElementsByTagName('span')[1];
 })
@@ -105,18 +131,18 @@ async function getExpenses(e) {
               headers: {"Authorization" : token}
           }
       const res = await axios.get('http://localhost:3000/expenses/getExpenses', config);
-      console.log("res---", res);
-      console.log("dataplan", res.data.userPlan)
+      userPlan = res.data.userPlan;
       if(res.data.userPlan === true) {
           document.getElementById("razr").innerHTML = "You are a premium user";
       }
       else if(res.data.userPlan == null){
-        document.querySelector("#download-monthly").style.display = 'none';
         document.querySelector(".Monthly-heading").style.display = 'none';
         document.querySelector(".Yearly-heading").style.display = 'none';
         document.querySelector(".monthly-expList").style.display = 'none';
         document.querySelector(".yearly-expList").style.display = 'none';
         document.querySelector("#reports").style.display = 'none';
+        document.querySelector('#leaderboard').style.display = 'none';
+        document.querySelector('#download-report').style.display = 'none';
       }
       res.data.expenses.forEach(expense => {
           const {amount, description, category} = expense;
