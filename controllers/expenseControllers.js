@@ -4,6 +4,8 @@ const User = require('../models/user');
 const Expense = require('../models/expense');
 const S3 = require('aws-sdk/clients/s3');
 require('dotenv').config();
+const sequelize = require('../util/database');
+const { Op } = require("sequelize");
 
 let isPremium;
 
@@ -157,4 +159,62 @@ module.exports.downloadExpenses = async(req, res, next) => {
         return res.status(500).json({fileUrl : '', error : err});
     }
    
+}
+
+
+module.exports.getReport = async(req, res, next) => {
+    try {
+        console.log("----user-----", req.user)
+        const user = await User.findByPk(req.user.userId);
+        console.log("----user----", user);
+        const d = new Date();
+        let month = d.getMonth() + 1;
+        let year = d.getFullYear();
+        if(user.isPremium) {
+            // const monthlyExpenses = await Expense.findAll({
+            //     where: {
+            //         userId : req.user.userId,
+            //       [Op.and]: [
+            //         sequelize.where(sequelize.fn('month', sequelize.col('createdAt')), month),
+            //         sequelize.where(sequelize.fn('year', sequelize.col('createdAt')), year)
+            //       ]
+            //     }
+            //   })
+            const monthlyExpenses =  await Expense.findAll({
+                where : {
+                    userId : req.user.userId,
+                    [Op.and]: [
+                                sequelize.where(sequelize.fn('month', sequelize.col('createdAt')), month),
+                                sequelize.where(sequelize.fn('year', sequelize.col('createdAt')), year)
+                              ]
+                },
+                attributes: [
+                  'category',
+                  [sequelize.fn('sum', sequelize.col('amount')), 'total_amount'],
+                ],
+                group: ['category'],
+              });
+
+            console.log("---monthly expenses---", monthlyExpenses);
+
+              const yearlyExpenses = await Expense.findAll({
+                where : {
+                    userId : req.user.userId,
+                    [Op.and] : [
+                        sequelize.where(sequelize.fn('year', sequelize.col('createdAt')), year)
+                    ]
+                },
+                attributes: [
+                    'category',
+                    [sequelize.fn('sum', sequelize.col('amount')), 'total_amount'],
+                  ],
+                  group: ['category'],
+              })
+            res.status(200).json({monthlyExpenses : monthlyExpenses, yearlyExpenses : yearlyExpenses});
+        }
+    }
+    catch(err) {
+        console.log(err);
+        res.status(404).json(err);
+    }
 }

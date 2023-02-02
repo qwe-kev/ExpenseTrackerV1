@@ -420,4 +420,29 @@
     
 }
 
-/* ------------------------------------------- */
+/* -----------------report canvas------------------------ */
+
+.container-canvas {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  width: 740px;
+}
+
+
+@media all and (max-width: 780px) {
+  .container {
+    width: auto;
+  }
+}
+
+@media all and (max-width: 400px) {
+  .container {
+    padding: 0px 20px;
+  }
+}

@@ -4,6 +4,8 @@ const expDesc = document.querySelector("#expDescription");
 const expCat = document.querySelector("#expCategory");
 const message = document.querySelector(".msg");
 const expList = document.querySelector(".expList");
+const monthlyexpList = document.querySelector(".monthly-expList");
+const yearlyexpList = document.querySelector(".yearly-expList");
 const buttonSubmit = document.querySelector("#Button");
 let userPlan;
 
@@ -178,6 +180,122 @@ document.getElementById('reports').addEventListener('click', async function(e) {
    var showReports = document.querySelector('#show-reports');
    if(showReports.style.display === 'none') {
         showReports.style.display = '';
+        const token = localStorage.getItem('token');
+        console.log(token);
+        const config = {
+            headers : {"Authorization" : token}
+        }
+        const reports = await axios.get('http://localhost:3000/expenses/getReports', config);
+        console.log("monthly", reports.data);
+        
+        let reportLabels = reports.data.monthlyExpenses.map(function (obj) {
+            return obj.category;
+        })
+
+        let reportAmounts = reports.data.monthlyExpenses.map(function (obj) {
+            return obj.total_amount;
+        })
+        const plugin = {
+            id: 'customCanvasBackgroundColor',
+            beforeDraw: (chart, args, options) => {
+              const {ctx} = chart;
+              ctx.save();
+              ctx.globalCompositeOperation = 'destination-over';
+              ctx.fillStyle = options.color || '#99ffff';
+              ctx.fillRect(0, 0, chart.width, chart.height);
+              ctx.restore();
+            }
+          };
+        new Chart(document.getElementById('pie-chart-monthly'), {
+            type: 'pie',
+            data: {
+              labels: reportLabels,
+              datasets: [{
+                backgroundColor: ['rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 132, 76)',
+                ],
+                data: reportAmounts,
+                    hoverOffset: 4,
+
+              }],
+              borderColor: '#3ABEFF',
+
+            },
+            type: 'doughnut',
+            options: {
+                title: {
+                    display: true,
+                    text: 'Pie Chart for admin panel'
+                  },
+                  reponsive: true,
+              plugins: {
+                title: {
+                    display: true,
+                    text: 'Monthly expense report'
+                },
+                customCanvasBackgroundColor: {
+                  color: 'lightYellow',
+                }
+              }
+            },
+            plugins: [plugin],
+          });
+          reportLabels = reports.data.yearlyExpenses.map(function (obj) {
+            return obj.category;
+        })
+        reportAmounts = reports.data.yearlyExpenses.map(function (obj) {
+            return obj.total_amount;
+        })
+
+
+          new Chart(document.getElementById('pie-chart-yearly'), {
+            type: 'pie',
+            legend: {
+                horizontalAlign: "left", // "center" , "right"
+                verticalAlign: "center",  // "top" , "bottom"
+                fontSize: 15
+              },
+            data: {
+                showInLegend: true,
+                legendText: "Numbers",
+              labels: reportLabels,
+              datasets: [{
+                backgroundColor: ["#e63946", "#89CFF0",
+                  "#ffbe0b", "#1d3557", "#326998", "#1d2056"
+                ],
+                data: reportAmounts,
+                    hoverOffset: 4
+
+              }]
+            },
+            type: 'doughnut',
+            options: {
+                title: {
+                    display: true,
+                    text: 'Pie Chart for admin panel'
+                  },
+                  reponsive: true,
+              plugins: {
+                legend: {
+                    display: true,
+                },
+                title: {
+                    display: true,
+                    text: 'Yearly expense report'
+                },
+                customCanvasBackgroundColor: {
+                  color: 'lightYellow',
+                }
+              }
+            },
+            plugins: [plugin],
+          });
+        
+        
    } else{
     showReports.style.display = 'none';
    }

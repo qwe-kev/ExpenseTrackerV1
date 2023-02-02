@@ -18,4 +18,6 @@ router.get('/getLeaderboard', premiumFeaturesController.showLeaderboard);
 
 router.get('/downloadExpenses', verifyToken, expenseControllers.downloadExpenses);
 
+router.get('/getReports', verifyToken, expenseControllers.getReport);
+
 module.exports = router;
