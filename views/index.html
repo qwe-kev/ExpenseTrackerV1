@@ -73,7 +73,16 @@
       <button type="button"  id="leaderboard" class="btn btn-sm btn-info btn-arrow-right">Show leaderboard</button>
       <button type="button"  id="reports" style="float: right;" class="btn btn-sm btn-danger btn-arrow-right">Show Reports</button>
       <hr>
-      <h3 class="fs-6 fw-bolder text-dark">Daily Expenses <button type="button"  id="download-report" style="float: right;" class="btn btn-sm btn-light text-dark btn-arrow-right">Download report</button>
+      <h3 class="fs-6 fw-bolder text-dark">Daily Expenses 
+        <button type="button"  id="download-report" class="btn btn-sm btn-warning text-dark btn-arrow-right">Download report</button>
+        <div class="btn-group dropend" style="float: right;">
+          <button type="button" class="btn btn-sm btn-light">Number of rows</button>
+          <button type="button" class="btn btn-sm btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul id="paginationLimit" class="dropdown-menu">
+          <br>
+        </div>
       </h3>  
       <ul class="expList">
           
@@ -116,7 +125,7 @@
        
     </ul>
         </div>
-        
+       
         <br>
         <ul class="leaderboardList" style="width:300px; display: none;">
       </ul>
@@ -141,9 +150,8 @@
         </ul>
       </nav>
     </div>
-   
 </div>
-
+<!-- Example split danger button -->
 <!-- <button type="button" id="razr">Premium Membership</button> -->
 <br>
 

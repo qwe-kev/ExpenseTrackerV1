@@ -12,10 +12,12 @@ document.querySelector(".pagination").addEventListener('click', async(e) => {
     try {
         const token = localStorage.getItem('token');
       const page = e.target.id;
+      const limit = localStorage.getItem('pagination_limit');
       const config = {
+              params : {page, limit},
               headers: {"Authorization" : token}
           }
-      const res = await axios.get(`http://localhost:3000/expenses/getExpenses/?page=${page}`, config);
+      const res = await axios.get(`http://localhost:3000/expenses/getExpenses`, config);
       userPlan = res.data.userPlan;
       if(res.data.userPlan === true) {
         document.getElementById("razr").innerHTML = "You are a premium user";
@@ -82,9 +84,17 @@ document.querySelector(".pagination").addEventListener('click', async(e) => {
     });
     }
     catch(err) {
-
+        console.log("pagination error", err);
     }
 })
+
+
+document.getElementById("paginationLimit").addEventListener('click', (e) => {
+    const limit = e.target.innerHTML;
+    localStorage.setItem("pagination_limit", limit);
+    window.location.reload();
+})
+
 
 document.getElementById("razr").addEventListener('click', async function(e){
     const token = localStorage.getItem('token');
@@ -205,13 +215,38 @@ const span = e.target.parentElement.parentElement.parentElement.getElementsByTag
 async function getExpenses(e) {
   try {
       const token = localStorage.getItem('token');
+      const limit = localStorage.getItem('pagination_limit');
       const page = 1;
       const config = {
+              params : {page, limit},
               headers: {"Authorization" : token}
           }
-      const res = await axios.get(`http://localhost:3000/expenses/getExpenses/?page=${page}`, config);
+      const res = await axios.get(`http://localhost:3000/expenses/getExpenses`, config);
       userPlan = res.data.userPlan;
+      console.log(res.data.pageDetails)
       if(res.data.pageDetails) {
+        const paginationSelector = document.getElementById("paginationLimit");
+        paginationSelector.innerHTML = "";
+        for(let i = 0;i < res.data.pageDetails.totalRecords;i += 5) {
+            const li = document.createElement("li");
+            const anchor = document.createElement("a");
+            anchor.classList.add('dropdown-item');
+            anchor.innerHTML = i + 5;
+            li.appendChild(anchor);
+            paginationSelector.appendChild(li);
+        }
+        if(res.data.pageDetails.pagelimit > res.data.pageDetails.totalRecords) {
+            const paginationSelector = document.getElementById("paginationLimit");
+            paginationSelector.innerHTML = "";
+            for(let i = 0;i < res.data.pageDetails.totalRecords;i += 5) {
+                const li = document.createElement("li");
+                const anchor = document.createElement("a");
+                anchor.classList.add('dropdown-item');
+                anchor.innerHTML = i + 5;
+                li.appendChild(anchor);
+                paginationSelector.appendChild(li);
+            }
+        }
         const paginationList = document.querySelector('.pagination');
         for(let i = 0;i < res.data.pageDetails.pagesRequired;i++) {
             const li  = document.createElement("li");
@@ -444,7 +479,13 @@ expList.addEventListener('click', async (e) => {
   }
 });
 
-document.addEventListener('DOMContentLoaded',getExpenses);
+document.addEventListener('DOMContentLoaded',() => {
+    if(!localStorage.getItem("pagination_limit")) {
+        localStorage.setItem("pagination_limit", 3);
+    }
+    getExpenses();
+});
+
 var expenseId, expItem;
 
 myForm.addEventListener('click', (e) => {

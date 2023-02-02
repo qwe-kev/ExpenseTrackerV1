@@ -14,25 +14,36 @@ module.exports.showindex = (req, res, next) => {
 module.exports.getExpenses = async (req, res, next) => {
     try {
         const pageNumber = req.query.page;
+        const pagelimit = req.query.limit;
         User.findByPk(req.user.userId)
         .then(user => {
             isPremium = user.isPremium;
         })
         if(pageNumber) {
-            const limit = 3;
+
+        const limit = +pagelimit;
         const offset = (pageNumber - 1) * limit;
         const totalRecords = await Expense.count({
             where: {
                userId : req.user.userId
             }
           });
-        const pagesRequired = ~~((totalRecords - 1) / limit) + 1;
-        const pageDetails = {pagesRequired : pagesRequired, totalRecords : totalRecords}
-        
+          if(pagelimit <= totalRecords) {
+            const pagesRequired = ~~((totalRecords - 1) / limit + 1);
+            const pageDetails = {pagesRequired : pagesRequired, totalRecords : totalRecords, pagelimit : pagelimit}
             Expense.findAll({where : {userId : req.user.userId}, offset: offset, limit: limit })
-        .then(expenses => {
+            .then(expenses => {
             res.status(200).json({expenses : expenses, userPlan : isPremium, pageDetails});
-        })
+            })
+          }
+          else{
+            const pagesRequired = ~~((totalRecords - 1) / limit + 1);
+            const pageDetails = {pagesRequired : pagesRequired, totalRecords : totalRecords, pagelimit : pagelimit}
+            Expense.findAll({where : {userId : req.user.userId} })
+            .then(expenses => {
+                res.status(200).json({expenses : expenses, userPlan : isPremium, pageDetails});
+            })
+          }
         }
         else{
             Expense.findAll({where : {userId : req.user.userId} })
