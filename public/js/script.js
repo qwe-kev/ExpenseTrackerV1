@@ -463,9 +463,10 @@ async function addExpense(e) {
       try{
           e.preventDefault();
           if(expAmt.value === "" || expDesc.value === "" || expCat.value === "") {
-              message.classList.add("bg-warning");
-              message.innerHTML = "please enter all fields";
-              setTimeout(() => message.remove(), 1000);
+            //   message.classList.add("bg-warning");
+            //   message.innerHTML = "please enter all fields";
+            //   setTimeout(() => message.remove(), 1000);
+            throw new Error("enter all fields")
           }
           else{
               let expItem = {

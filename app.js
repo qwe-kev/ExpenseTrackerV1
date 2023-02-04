@@ -1,14 +1,6 @@
 const express = require('express');
 
-const fs = require('fs');
-
-const path = require('path');
-
-const helmet = require('helmet');
-
-const compression = require('compression');
-
-const morgan = require('morgan');
+require('dotenv').config();
 
 const sequelize = require('./util/database');
 
@@ -26,22 +18,11 @@ const cors = require('cors')
  
 const app = express();
 
-require('dotenv').config();
-
-
 app.use(cors())
 
-app.use(helmet({
-    contentSecurityPolicy: false
-  }));
+const {API_PORT} = process.env;
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags : 'a'})
-
-app.use(compression())
-
-app.use(morgan('combined', {stream : accessLogStream}))
-
-const port = process.env.API_PORT || 3000;
+const port = process.env.PORT || API_PORT;
 
 app.set('views', 'views');
 
@@ -83,7 +64,6 @@ ForgotPasswordRequest.belongsTo(User);
 
 User.hasMany(ForgotPasswordRequest,  { onDelete: 'CASCADE', hooks: true });
 
-console.log(process.env.NODE_ENV)
 sequelize.sync()
 .then(() => {
     app.listen(port, () => {
