@@ -8,6 +8,11 @@
   justify-content: center;
 }
 
+#my-form {
+    background-color:transparent !important;
+       border:none !important;
+}
+
 .listWrap {
     
     height: 800px;
