@@ -46,14 +46,14 @@
 									</label>
 								</div>
 								<div class="w-50 text-md-right">
-									<a href="http://3.109.200.159:3000/password/forgotpassword" style="color: #fff">Forgot Password?</a>
+									<a href="http://3.110.155.116:3000/password/forgotpassword" style="color: #fff">Forgot Password?</a>
 								</div>
 	            </div>
 	          </form>
 			  <p class="w-100 text-center message"></p>
 	          <p class="w-100 text-center">&mdash;New user? &mdash;</p>
 	          <div class="social d-flex text-center">
-	          	<a href="http://3.109.200.159:3000/users/signUp" class="px-2 py-2 mr-md-1 rounded">Sign up</a>
+	          	<a href="http://3.110.155.116:3000/users/signUp" class="px-2 py-2 mr-md-1 rounded">Sign up</a>
 	          </div>
 		      </div>
 				</div>
@@ -65,7 +65,7 @@
           try {
             const email = document.querySelector('#email').value;
             const password = document.querySelector('#password-field').value;
-            const res = await axios.post('http://3.109.200.159:3000/users/login', {
+            const res = await axios.post('http://3.110.155.116:3000/users/login', {
               email : email,
               password : password
           })
@@ -74,7 +74,7 @@
             
 			localStorage.setItem('token', res.data.token);
 			if(res.data.status === 200 && res.data.message === "Successfully logged in"){
-				window.location.href = 'http://3.109.200.159:3000/expenses/index.html';
+				window.location.href = 'http://3.110.155.116:3000/expenses/index.html';
 			}
 		  
           }

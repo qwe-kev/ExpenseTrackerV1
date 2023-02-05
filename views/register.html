@@ -45,10 +45,11 @@
 			  <p class="w-100 text-center message"></p>
 	          <p class="w-100 text-center">&mdash; Have an account? &mdash;</p>
 	          <div class="social d-flex text-center">
-	          	<a href="http://3.109.200.159:3000/users/login" class="px-2 py-2 mr-md-1 rounded">Login</a>
+	          	<a href="http://3.110.155.116:3000/users/login" class="px-2 py-2 mr-md-1 rounded">Login</a>
 	          </div>
 		      </div>
 				</div>
+				
 			</div>
 		</div>
 	</section>
@@ -60,14 +61,14 @@
             const password = document.querySelector('#password-field').value;
 			console.log(name, email, password);
 
-            const res = await axios.post('http://3.109.200.159:3000/users/createUser', {
+            const res = await axios.post('http://3.110.155.116:3000/users/createUser', {
               name : name, 
               email : email,
               password : password
           })
 		  console.log("res", res)
           document.querySelector('.message').innerHTML = "Cheers! created account";
-		  window.location.replace("http://3.109.200.159:3000/users/login");
+		  window.location.replace("http://3.110.155.116/users/login");
           }
           catch(err) {
             console.log("ERROR!!!", err);

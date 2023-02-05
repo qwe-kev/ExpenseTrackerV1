@@ -19,7 +19,7 @@ document.querySelector(".pagination").addEventListener('click', async(e) => {
               params : {page, limit},
               headers: {"Authorization" : token}
           }
-      const res = await axios.get(`http://3.109.200.159:3000/expenses/getExpenses`, config);
+      const res = await axios.get(`http://3.110.155.116:3000/expenses/getExpenses`, config);
       userPlan = res.data.userPlan;
       if(res.data.userPlan === true) {
         document.getElementById("razr").innerHTML = "You are a premium user";
@@ -101,12 +101,12 @@ document.getElementById("paginationLimit").addEventListener('click', (e) => {
 document.getElementById("razr").addEventListener('click', async function(e){
     const token = localStorage.getItem('token');
     console.log(token)
-    const res = await axios.get('http://3.109.200.159:3000/purchase/premiummembership',{headers : {"Authorization" : token}});
+    const res = await axios.get('http://3.110.155.116:3000/purchase/premiummembership',{headers : {"Authorization" : token}});
     var options = {
         "key" : res.data.key_id,
         "order_id" : res.data.order.id,
         "handler" : async function (response) {
-            await axios.post('http://3.109.200.159:3000/purchase/updateTransactionStatus', {
+            await axios.post('http://3.110.155.116:3000/purchase/updateTransactionStatus', {
                 order_id : options.order_id,
                 payment_id : response.razorpay_payment_id,
         }, { headers : {"Authorization" : token}})
@@ -134,7 +134,7 @@ document.getElementById('leaderboard').addEventListener('click', async function(
         leaderboardList.innerHTML = "";
 
         if (leaderboardList.style.display === "none") {
-            const res = await axios.get('http://3.109.200.159:3000/expenses/getLeaderboard');
+            const res = await axios.get('http://3.110.155.116:3000/expenses/getLeaderboard');
             console.log("leader board", res)
             const leaderboard = res.data.leaderboard;
             console.log("leader board array", leaderboard)
@@ -185,7 +185,7 @@ document.getElementById('reports').addEventListener('click', async function(e) {
         const config = {
             headers : {"Authorization" : token}
         }
-        const reports = await axios.get('http://3.109.200.159:3000/expenses/getReports', config);
+        const reports = await axios.get('http://3.110.155.116:3000/expenses/getReports', config);
         console.log("monthly", reports.data);
         
         let reportLabels = reports.data.monthlyExpenses.map(function (obj) {
@@ -313,7 +313,7 @@ document.getElementById('download-report').addEventListener('click', async funct
               
                   headers: {"Authorization" : token}
               }
-            const res = await axios.get('http://3.109.200.159:3000/expenses/downloadExpenses',config);
+            const res = await axios.get('http://3.110.155.116:3000/expenses/downloadExpenses',config);
             const link = document.createElement('a');
             link.href = res.data.fileUrl.Location;
             link.download = 'expense_report.txt';
@@ -339,7 +339,7 @@ async function getExpenses(e) {
               params : {page, limit},
               headers: {"Authorization" : token}
           }
-      const res = await axios.get(`http://3.109.200.159:3000/expenses/getExpenses`, config);
+      const res = await axios.get(`http://3.110.155.116:3000/expenses/getExpenses`, config);
       userPlan = res.data.userPlan;
       console.log(res.data.pageDetails)
       if(res.data.pageDetails) {
@@ -479,7 +479,7 @@ async function addExpense(e) {
           
                   headers: {"Authorization" : token}
               }
-              const res = await axios.post(`http://3.109.200.159:3000/expenses/addExpense`,expItem, config);
+              const res = await axios.post(`http://3.110.155.116:3000/expenses/addExpense`,expItem, config);
               console.log(res.data)
               window.location.reload();
           }
@@ -507,7 +507,7 @@ async function deleteExpense(e) {
       if(e.target.classList && e.target.classList.contains('delete')){
           let li = e.target.parentNode.parentNode.parentNode;
           const expenseSelected = [li.childNodes[0].textContent,li.childNodes[1].textContent,li.childNodes[2].textContent]
-          const readExp = await axios.get(`http://3.109.200.159:3000/expenses/getExpenses`, {headers: {"Authorization" : token}});
+          const readExp = await axios.get(`http://3.110.155.116:3000/expenses/getExpenses`, {headers: {"Authorization" : token}});
           readExp.data.expenses.forEach(expense => {
               if(expense.amount === +expenseSelected[0] && expense.description === expenseSelected[1] && expense.category === expenseSelected[2]) {
                   id = expense.id;
@@ -521,7 +521,7 @@ async function deleteExpense(e) {
       }
       }
       console.log("id", id)
-      const res = await axios.get(`http://3.109.200.159:3000/expenses/deleteExpense`, config);
+      const res = await axios.get(`http://3.110.155.116:3000/expenses/deleteExpense`, config);
       console.log("deleted expense",res);
       window.location.reload();
   }
@@ -552,7 +552,7 @@ async function editExpense(e, expItem, id) {
         }
       }
       e.preventDefault();
-      const editRes = await axios.get(`http://3.109.200.159:3000/expenses/editExpense`, config);
+      const editRes = await axios.get(`http://3.110.155.116:3000/expenses/editExpense`, config);
       console.log("edited item");
       window.location.reload();
   }
@@ -589,7 +589,7 @@ expList.addEventListener('click', async (e) => {
       document.querySelector("#expDescription").setAttribute('value', description);
       document.querySelector("#expCategory").setAttribute('value', category);
      // li = e.target.parentNode.firstChild.wholeText.split('-');
-      const readExp = await axios.get(`http://3.109.200.159:3000/expenses/getExpenses`, config);
+      const readExp = await axios.get(`http://3.110.155.116:3000/expenses/getExpenses`, config);
       readExp.data.expenses.forEach(expense => {
           if(expense.amount === +expenseSelected[0] && expense.description === expenseSelected[1] && expense.category === expenseSelected[2]) {
               id = expense.id;
