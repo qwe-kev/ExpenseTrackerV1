@@ -62,7 +62,7 @@ module.exports.postForgotPassword = async(req, res, next) => {
             subject : 'Password reset link',
             textContent : 'hey  here to reset your password',
             htmlContent : `<h1>Your password reset link<h1>
-            <a href="http://localhost:3000/password/resetpassword/{{params.requestId}}">click here to reset your password</a>`,
+            <a href="http://3.109.200.159:3000/password/resetpassword/{{params.requestId}}">click here to reset your password</a>`,
             params : {
                 requestId : requestId
             }

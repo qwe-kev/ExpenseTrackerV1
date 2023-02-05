@@ -2,6 +2,12 @@ const express = require('express');
 
 require('dotenv').config();
 
+const fs = require('fs');
+
+const path = require('path');
+
+const morgan = require('morgan');
+
 const sequelize = require('./util/database');
 
 const User = require('./models/user');
@@ -17,6 +23,10 @@ const auth = require('./middleware/auth');
 const cors = require('cors')
  
 const app = express();
+
+const writeFileStream = fs.createWriteStream(path.join(__dirname, "access.log"), {flags : "a"});
+
+app.use(morgan('combined', {stream : writeFileStream}));
 
 app.use(cors())
 
