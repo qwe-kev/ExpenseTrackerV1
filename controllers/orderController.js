@@ -6,7 +6,7 @@ module.exports.purchasePremium = (req, res, next) => {
     try {
         const rzp = new RazorPay({
             key_id: process.env.RAZORPAY_KEY_ID,
-            key_secret : process.env.RAZORPAY_SECRET_key
+            key_secret : process.env.RAZORPAY_SECRET_KEY
         })
         const amount = 2500;
         rzp.orders.create({amount, currency : 'INR'}, (err, order) => {
